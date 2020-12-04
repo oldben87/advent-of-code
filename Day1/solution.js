@@ -1,32 +1,31 @@
 const { data } = require('./data')
 
 function findSum2(arr) {
-  let returnMe
-  arr.forEach((a, indA, arrayA) => {
-    return arrayA.forEach((b, indB, arrayB) => {
+  let result
+  arr.forEach((a) => {
+    arr.forEach((b) => {
       if (a + b === 2020) {
-        returnMe = a * b
+        result = a * b
       }
     })
   })
-  return returnMe
+  return result
 }
 
-console.log(findSum2(data))
+console.log('Pt1:', findSum2(data))
 
 function findSum3(arr) {
-  let returnMe
-
-  arr.forEach((a, indA, arrayA) => {
-    return arrayA.forEach((b, indB, arrayB) => {
-      return arrayB.forEach((c) => {
+  let result
+  arr.forEach((a) => {
+    arr.forEach((b) => {
+      arr.forEach((c) => {
         if (a + b + c === 2020) {
-          returnMe = a * b * c
+          result = a * b * c
         }
       })
     })
   })
-  return returnMe
+  return result
 }
 
-console.log(findSum3(data))
+console.log('Pt2:', findSum3(data))
