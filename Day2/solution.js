@@ -38,10 +38,10 @@ data.forEach((item) => {
     password: arr[2],
   }
 
-  let valid = false
-
   let isMatch1 = obj.password[obj.ind1 - 1] === obj.letter
   let isMatch2 = obj.password[obj.ind2 - 1] === obj.letter
+
+  let valid = false
 
   if (isMatch1 && !isMatch2) {
     valid = true
