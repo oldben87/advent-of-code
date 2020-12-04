@@ -5,34 +5,31 @@ const path = require('path')
 let text = fs.readFileSync(path.resolve(__dirname, './data.txt'), 'utf8')
 const data = text.split('\r\n')
 
-/*
-steps to solve day 1:
- - const col = keep track of column 
- - const row = keep track of row
- - 
- 
- recursive solution?
-*/
-
-function countTrees(arr, row = 0, col = 0, count = 0) {
+function countTrees(arr, right, down, row = 0, col = 0, count = 0) {
   arr[row][col] === '#' ? count++ : null
 
   if (row === arr.length - 1) {
     return count
   }
 
-  if (!arr[row][col + 1]) {
-    col = 2
-  } else if (!arr[row][col + 2]) {
-    col = 1
-  } else if (!arr[row][col + 3]) {
-    col = 0
-  } else {
-    col += 3
+  for (let i = 1; i <= right; i++) {
+    if (arr[row][col + 1]) {
+      col++
+    } else {
+      col = 0
+    }
   }
-  row++
 
-  return countTrees(arr, row, col, count)
+  row += down
+
+  return countTrees(arr, right, down, row, col, count)
 }
+const pt2 =
+  countTrees(data, 1, 1) *
+  countTrees(data, 3, 1) *
+  countTrees(data, 5, 1) *
+  countTrees(data, 7, 1) *
+  countTrees(data, 1, 2)
 
-console.log('pt1:', countTrees(data))
+console.log('pt1:', countTrees(data, 3, 1))
+console.log('pt2:', pt2)
