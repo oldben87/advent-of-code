@@ -6,12 +6,15 @@ let text = fs.readFileSync(path.resolve(__dirname, './data.txt'), 'utf8')
 const data = text.split('\r\n')
 
 function countTrees(arr, right, down, row = 0, col = 0, count = 0) {
+  //check for a tree at current position
   arr[row][col] === '#' ? count++ : null
 
+  // return if at bottom of hill
   if (row === arr.length - 1) {
     return count
   }
 
+  // increment steps right
   for (let i = 1; i <= right; i++) {
     if (arr[row][col + 1]) {
       col++
@@ -20,10 +23,12 @@ function countTrees(arr, right, down, row = 0, col = 0, count = 0) {
     }
   }
 
+  //move down hill
   row += down
 
   return countTrees(arr, right, down, row, col, count)
 }
+
 const pt2 =
   countTrees(data, 1, 1) *
   countTrees(data, 3, 1) *
