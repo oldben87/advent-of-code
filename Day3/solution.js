@@ -15,12 +15,11 @@ function countTrees(arr, right, down, row = 0, col = 0, count = 0) {
   }
 
   // increment steps right
-  for (let i = 1; i <= right; i++) {
-    if (arr[row][col + 1]) {
-      col++
-    } else {
-      col = 0
-    }
+  const checkEnd = arr[row].slice(col + 1, col + 1 + right).length
+  if (checkEnd === right) {
+    col += right
+  } else {
+    col = right - 1 - checkEnd
   }
 
   //move down hill
