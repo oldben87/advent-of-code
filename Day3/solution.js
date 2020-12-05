@@ -17,11 +17,9 @@ function countTrees(arr, right, down, row = 0, col = 0, count = 0) {
   arr[row][col] === '#' ? count++ : null
 
   // return if at bottom of hill
-  if (row === arr.length - 1) {
-    return count
-  }
-
-  return countTrees(arr, right, down, row, col, count)
+  return row === arr.length - 1
+    ? count
+    : countTrees(arr, right, down, row, col, count)
 }
 
 const pt1 = countTrees(data, 3, 1)
