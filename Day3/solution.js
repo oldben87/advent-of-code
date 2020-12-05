@@ -29,12 +29,14 @@ function countTrees(arr, right, down, row = 0, col = 0, count = 0) {
   return countTrees(arr, right, down, row, col, count)
 }
 
+const pt1 = countTrees(data, 3, 1)
+
 const pt2 =
+  pt1 *
   countTrees(data, 1, 1) *
-  countTrees(data, 3, 1) *
   countTrees(data, 5, 1) *
   countTrees(data, 7, 1) *
   countTrees(data, 1, 2)
 
-console.log('pt1:', countTrees(data, 3, 1))
+console.log('pt1:', pt1)
 console.log('pt2:', pt2)
