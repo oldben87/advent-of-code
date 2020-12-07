@@ -1,8 +1,17 @@
 const fs = require('fs')
 const path = require('path')
-const R = require('ramda')
+const {
+  allPass,
+  gte,
+  lte,
+  __,
+  test,
+  keys,
+  omit,
+  splitAt,
+  curry,
+} = require('ramda')
 
-const { allPass, gte, lte, __, test, keys } = R
 // parse data
 let text = fs.readFileSync(path.resolve(__dirname, 'data.txt'), 'utf8')
 const data = text.split('\n\n').map((item) => {
@@ -28,7 +37,7 @@ const control = {
   cid: '',
 }
 const keysBString = JSON.stringify(keys(control).sort())
-const keysCString = JSON.stringify(keys(R.omit(['cid'], control)).sort())
+const keysCString = JSON.stringify(keys(omit(['cid'], control)).sort())
 
 //Part 1 Function
 function validatePassports1(arr) {
@@ -47,28 +56,28 @@ function validatePassports1(arr) {
 
 // part 2
 //Define Tests:
-const is4Digits = (item) => item.length === 4
+const isDigits = curry((item, size) => item.length === size)
 const birthYear = ({ byr }) => {
-  return allPass([is4Digits, gte(__, 1920), lte(__, 2002)])(byr)
+  return allPass([isDigits(__, 4), gte(__, 1920), lte(__, 2002)])(byr)
 }
 const issueYear = ({ iyr }) => {
-  return allPass([is4Digits, gte(__, 2010), lte(__, 2020)])(iyr)
+  return allPass([isDigits(__, 4), gte(__, 2010), lte(__, 2020)])(iyr)
 }
 const expirationYear = ({ eyr }) => {
-  return allPass([is4Digits, gte(__, 2020), lte(__, 2030)])(eyr)
+  return allPass([isDigits(__, 4), gte(__, 2020), lte(__, 2030)])(eyr)
 }
 
-const is9Digits = (num) => num.length === 9
-const passportID = ({ pid }) => allPass([test(/[0-9]{9}$/), is9Digits])(pid)
+const passportID = ({ pid }) =>
+  allPass([test(/[0-9]{9}$/), isDigits(__, 9)])(pid)
 
 const eyeList = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
 const eyeColour = ({ ecl }) => eyeList.some((colour) => colour === ecl)
 
 const regex = /\B#[0-9a-f]{6}/g
-const hairColour = ({ hcl }) => test(regex)(hcl)
+const hairColour = ({ hcl }) => allPass([test(regex), isDigits(__, 7)])(hcl)
 
 const height = ({ hgt }) => {
-  const splitHeight = R.splitAt(-2, hgt)
+  const splitHeight = splitAt(-2, hgt)
   if (
     splitHeight[1] === 'cm' &&
     splitHeight[0] <= 193 &&
