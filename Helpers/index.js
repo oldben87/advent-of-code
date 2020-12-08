@@ -1,1 +1,1 @@
-export * from './isDigits'
+export * from './checkLength'
