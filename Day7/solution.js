@@ -25,7 +25,7 @@ data.forEach((bag) => {
     children: { ...innerBags },
   })
 })
-
+// create recusrisve pt1 function, returns array of valid parents
 function checkChildren(string, hasGold = [], i = 0) {
   if (hasPath([string])(bagsObject[i].children)) {
     hasGold.push(bagsObject[i].name)
@@ -37,7 +37,6 @@ function checkChildren(string, hasGold = [], i = 0) {
     return checkChildren(string, hasGold, i + 1)
   }
 }
-
-const pt1 = new Set(checkChildren('shiny gold'))
-
-console.log('pt1', pt1.size)
+//remove duplicate parents
+const pt1 = new Set(checkChildren('shiny gold')).size
+console.log('pt1', pt1)
