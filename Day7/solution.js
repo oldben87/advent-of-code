@@ -25,18 +25,33 @@ data.forEach((bag) => {
     children: { ...innerBags },
   })
 })
+
 // create recusrisve pt1 function, returns array of valid parents
-function checkChildren(string, hasGold = [], i = 0) {
+function checkParent(string, hasGold = [], i = 0) {
   if (hasPath([string])(bagsObject[i].children)) {
     hasGold.push(bagsObject[i].name)
-    hasGold.push(...checkChildren(bagsObject[i].name))
+    hasGold.push(...checkParent(bagsObject[i].name))
   }
-  if (i === bagsObject.length - 1) {
-    return hasGold
-  } else {
-    return checkChildren(string, hasGold, i + 1)
-  }
+
+  i === bagsObject.length - 1 ? hasGold : checkParent(string, hasGold, i + 1)
 }
+
 //remove duplicate parents
-const pt1 = new Set(checkChildren('shiny gold')).size
+const pt1 = new Set(checkParent('shiny gold')).size
+
+// day7 pt 2, returns total number of child bags
+function countChildren(string, bagTotal = 0, i = 0) {
+  if (bagsObject[i].name === string) {
+    keys(bagsObject[i].children).forEach((item) => {
+      bagTotal += parseInt(bagsObject[i].children[item])
+      bagTotal += parseInt(bagsObject[i].children[item]) * countChildren(item)
+    })
+  }
+
+  return i === bagsObject.length - 1
+    ? bagTotal
+    : countChildren(string, bagTotal, i + 1)
+}
+
 console.log('pt1', pt1)
+console.log('pt2', countChildren('shiny gold'))
