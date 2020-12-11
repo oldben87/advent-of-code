@@ -27,3 +27,34 @@ function stopInfinate(acc = 0, i = 0, arr = []) {
 }
 
 console.log('pt1', stopInfinate())
+
+// pt 2 change item in array
+
+function fixGameboy(acc = 0, i = 0, switched = false) {
+  if (i === data.length) {
+    return acc
+  }
+  if (data[i].cmd === 'nop' && switched) {
+    return fixGameboy(acc, i + 1, switched)
+  } else if (data[i].cmd === 'nop' && !switched) {
+    try {
+      return fixGameboy(acc, i + parseInt(data[i].val), true)
+    } catch {
+      return fixGameboy(acc, i + 1, false)
+    }
+  }
+  if (data[i].cmd === 'jmp' && switched) {
+    return fixGameboy(acc, i + parseInt(data[i].val), switched)
+  } else if (data[i].cmd === 'jmp' && !switched) {
+    try {
+      return fixGameboy(acc, i + 1, true)
+    } catch {
+      return fixGameboy(acc, i + parseInt(data[i].val), false)
+    }
+  }
+  if (data[i].cmd === 'acc') {
+    return fixGameboy(acc + parseInt(data[i].val), i + 1, switched)
+  }
+}
+
+console.log('pt2', fixGameboy())
