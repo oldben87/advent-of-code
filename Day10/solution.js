@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { slice, splitAt, equals, tail, sort } = require('ramda')
+const { sort } = require('ramda')
 
 // parse data
 const text = fs.readFileSync(path.resolve(__dirname, './dataTest.txt'), 'utf8')
