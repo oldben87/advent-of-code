@@ -5,7 +5,7 @@ const path = require('path')
 const text = fs.readFileSync(path.resolve(__dirname, './data.txt'), 'utf8')
 const data = text.split('\n').map((item) => {
   const cmdVal = item.split(' ')
-  return { cmd: cmdVal[0], val: cmdVal[1] }
+  return { cmd: cmdVal[0], val: parseInt(cmdVal[1]) }
 })
 // return acc when re-hit same data
 function stopInfinate(acc = 0, i = 0, arr = []) {
@@ -18,11 +18,11 @@ function stopInfinate(acc = 0, i = 0, arr = []) {
   }
   if (data[i].cmd === 'acc') {
     arr.push(i)
-    return stopInfinate(acc + parseInt(data[i].val), i + 1, arr)
+    return stopInfinate(acc + data[i].val, i + 1, arr)
   }
   if (data[i].cmd === 'jmp') {
     arr.push(i)
-    return stopInfinate(acc, i + parseInt(data[i].val), arr)
+    return stopInfinate(acc, i + data[i].val, arr)
   }
 }
 
@@ -38,22 +38,22 @@ function fixGameboy(acc = 0, i = 0, switched = false) {
     return fixGameboy(acc, i + 1, switched)
   } else if (data[i].cmd === 'nop' && !switched) {
     try {
-      return fixGameboy(acc, i + parseInt(data[i].val), true)
+      return fixGameboy(acc, i + data[i].val, true)
     } catch {
       return fixGameboy(acc, i + 1, false)
     }
   }
   if (data[i].cmd === 'jmp' && switched) {
-    return fixGameboy(acc, i + parseInt(data[i].val), switched)
+    return fixGameboy(acc, i + data[i].val, switched)
   } else if (data[i].cmd === 'jmp' && !switched) {
     try {
       return fixGameboy(acc, i + 1, true)
     } catch {
-      return fixGameboy(acc, i + parseInt(data[i].val), false)
+      return fixGameboy(acc, i + data[i].val, false)
     }
   }
   if (data[i].cmd === 'acc') {
-    return fixGameboy(acc + parseInt(data[i].val), i + 1, switched)
+    return fixGameboy(acc + data[i].val, i + 1, switched)
   }
 }
 
