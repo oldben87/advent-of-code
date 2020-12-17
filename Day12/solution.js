@@ -56,5 +56,6 @@ function navigateShip(arr, i = 0, curDir = 90, north = 0, east = 0) {
     ? Math.abs(north) + Math.abs(east)
     : navigateShip(arr, i + 1, curDir, north, east)
 }
-
+console.time('pt1')
 console.log('pt1', navigateShip(data))
+console.timeEnd('pt1')
