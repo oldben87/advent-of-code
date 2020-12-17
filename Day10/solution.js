@@ -25,7 +25,9 @@ function countDiff(arr) {
   return one * three
 }
 
+console.time('pt1')
 console.log('pt1', countDiff(data))
+console.timeEnd('pt1')
 
 const memoize = (fn) => {
   let cache = {}
@@ -54,4 +56,6 @@ const numberOfValid = memoize((i = 0, steps = 1) => {
   return steps
 })
 
+console.time('pt2')
 console.log('pt2', numberOfValid())
+console.timeEnd('pt2')

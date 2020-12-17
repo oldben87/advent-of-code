@@ -51,6 +51,10 @@ function calculateSumRange(arr, matchingValue) {
     return calculateSumRange(arr, matchingValue)
   }
 }
-
+console.time('pt1')
 console.log('pt1', pt1)
+console.timeEnd('pt1')
+
+console.time('pt2')
 console.log('pt2', calculateSumRange(dataSplit[0], pt1))
+console.timeEnd('pt2')

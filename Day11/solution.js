@@ -175,7 +175,9 @@ function seatSwap2(arr) {
     ? countOccupied(arr)
     : seatSwap2(newArr)
 }
-
+console.time('pt1')
 console.log('pt1', seatSwap(data))
-
+console.timeEnd('pt1')
+console.time('pt2')
 console.log('pt2', seatSwap2(data))
+console.timeEnd('pt2')
