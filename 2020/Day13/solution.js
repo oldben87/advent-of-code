@@ -40,6 +40,8 @@ console.time('pt1')
 console.log('pt1', findShortestTimeToWait(earliestTimestamp, busIds))
 console.timeEnd('pt1')
 
+// Brute force method, took 14 hours to run :(
+
 const findTimestampWithConsecutiveBuses = busIds => {
   const largestNumber = Math.max(
     ...busIds.filter(id => id !== 'x').map(id => parseInt(id)),
