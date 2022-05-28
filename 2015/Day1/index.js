@@ -1,10 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
-// parse data to array
 const text = fs.readFileSync(path.resolve(__dirname, "./data.txt"), "utf8")
-
-console.log(text)
 
 const floorNumber = (instructions) => {
   return instructions.split("").reduce((floor, inst) => {
