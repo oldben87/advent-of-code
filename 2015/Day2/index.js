@@ -25,9 +25,7 @@ const calculateWrapping = (dimensions) => {
 }
 
 const getSurfaceArea = (dimensionList) => {
-  return dimensionList
-    .map(calculateWrapping)
-    .reduce((total, area) => total + area, 0)
+  return dimensionList.map(calculateWrapping).reduce(R.add)
 }
 
 const calcRibbon = (dimensions) => {
@@ -37,12 +35,12 @@ const calcRibbon = (dimensions) => {
   return short * med * long + ribbon
 }
 
-const addAllRibbons = data.map(calcRibbon).reduce(R.add)
+const addAllRibbons = (arr) => arr.map(calcRibbon).reduce(R.add)
 
 console.time("pt1")
 console.log("pt1", getSurfaceArea(data))
 console.timeEnd("pt1")
 
 console.time("pt2")
-console.log("pt2", addAllRibbons)
+console.log("pt2", addAllRibbons(data))
 console.timeEnd("pt2")
