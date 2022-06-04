@@ -5,15 +5,13 @@ const R = require("ramda")
 const text = fs.readFileSync(path.resolve(__dirname, "./data.txt"), "utf8")
 const commands = text.split("\n").map((ins) => ins.split(" "))
 
-const wireHash = {}
-
 const not = (number) => 65535 - number
 const and = (num1, num2) => num1 & num2
 const or = (num1, num2) => num1 | num2
 const lShift = (num1, num2) => num1 << num2
 const rShift = (num1, num2) => num1 >> num2
 
-const findWireAValue = (cmds) => {
+const findWireAValue = (cmds, wireHash = {}) => {
   let commandsReduced = cmds
 
   while (true) {
@@ -126,6 +124,12 @@ console.time("pt1")
 console.log("pt1", findWireAValue(commands))
 console.timeEnd("pt1")
 
-// console.time("pt2")
-// console.log("pt2", totalBrightnessValue(cmds))
-// console.timeEnd("pt2")
+console.time("pt2")
+console.log(
+  "pt2",
+  findWireAValue(
+    commands.filter((cmd) => R.last(cmd) !== "b"),
+    { b: 956 }
+  )
+)
+console.timeEnd("pt2")
