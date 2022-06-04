@@ -13,124 +13,118 @@ const or = (num1, num2) => num1 | num2
 const lShift = (num1, num2) => num1 << num2
 const rShift = (num1, num2) => num1 >> num2
 
-let commandsReduced = commands
+const findWireAValue = (cmds) => {
+  let commandsReduced = cmds
 
-while (true) {
-  commandsReduced = commandsReduced.reduce((acc, cmd) => {
-    if (!isNaN(parseInt(cmd[0]))) {
-      const current = wireHash[cmd[2]] || 0
-      const newValue = parseInt(cmd[0]) + current
-      wireHash[cmd[2]] = newValue
+  while (true) {
+    commandsReduced = commandsReduced.reduce((acc, cmd) => {
+      if (!isNaN(parseInt(cmd[0])) && cmd.length === 3) {
+        const current = wireHash[cmd[2]] || 0
+        const newValue = parseInt(cmd[0]) + current
+        wireHash[cmd[2]] = newValue
 
-      return acc
-    }
-
-    if (cmd[0] === "NOT") {
-      const input = wireHash[cmd[1]]
-      if (input === undefined) {
-        return [...acc, cmd]
+        return acc
       }
 
-      const newPosition = `${cmd[3]}`
+      if (cmd[0] === "NOT") {
+        const input = wireHash[cmd[1]]
+        if (input === undefined) {
+          return [...acc, cmd]
+        }
 
-      const current = wireHash[newPosition] || 0
+        const newPosition = `${cmd[3]}`
 
-      const newValue = current + not(input)
+        const current = wireHash[newPosition] || 0
 
-      wireHash[newPosition] = newValue
+        const newValue = current + not(input)
 
-      return acc
-    }
+        wireHash[newPosition] = newValue
 
-    if (cmd[1] === "AND") {
-      const input1 = wireHash[cmd[0]]
-      const input2 = wireHash[cmd[2]]
-
-      if (input1 === undefined || input2 === undefined) {
-        return [...acc, cmd]
+        return acc
       }
 
-      const newPosition = `${cmd[4]}`
-      const current = wireHash[newPosition] || 0
+      if (cmd[1] === "AND") {
+        const input1 = isNaN(parseInt(cmd[0], 10)) ? wireHash[cmd[0]] : cmd[0]
+        const input2 = wireHash[cmd[2]]
 
-      wireHash[newPosition] = current + and(input1, input2)
+        if (input1 === undefined || input2 === undefined) {
+          return [...acc, cmd]
+        }
 
-      return acc
-    }
+        const newPosition = `${cmd[4]}`
+        const current = wireHash[newPosition] || 0
 
-    if (cmd[1] === "OR") {
-      const input1 = wireHash[cmd[0]]
-      const input2 = wireHash[cmd[2]]
+        wireHash[newPosition] = current + and(input1, input2)
 
-      if (input1 === undefined || input2 === undefined) {
-        return [...acc, cmd]
+        return acc
       }
 
-      const newPosition = `${cmd[4]}`
-      const current = wireHash[newPosition] || 0
-      wireHash[newPosition] = current + or(input1, input2)
+      if (cmd[1] === "OR") {
+        const input1 = wireHash[cmd[0]]
+        const input2 = wireHash[cmd[2]]
 
-      return acc
-    }
+        if (input1 === undefined || input2 === undefined) {
+          return [...acc, cmd]
+        }
 
-    if (cmd[1] === "LSHIFT") {
-      const input1 = wireHash[cmd[0]]
-      const input2 = cmd[2]
+        const newPosition = `${cmd[4]}`
+        const current = wireHash[newPosition] || 0
+        wireHash[newPosition] = current + or(input1, input2)
 
-      if (input1 === undefined || input2 === undefined) {
-        return [...acc, cmd]
+        return acc
       }
 
-      const newPosition = `${cmd[4]}`
-      const current = wireHash[newPosition] || 0
-      wireHash[newPosition] = current + lShift(input1, input2)
-      return acc
-    }
+      if (cmd[1] === "LSHIFT") {
+        const input1 = wireHash[cmd[0]]
+        const input2 = cmd[2]
 
-    if (cmd[1] === "RSHIFT") {
-      const input1 = wireHash[cmd[0]]
-      const input2 = cmd[2]
+        if (input1 === undefined) {
+          return [...acc, cmd]
+        }
 
-      if (input1 === undefined || input2 === undefined) {
-        return [...acc, cmd]
+        const newPosition = `${cmd[4]}`
+        const current = wireHash[newPosition] || 0
+        wireHash[newPosition] = current + lShift(input1, input2)
+        return acc
       }
 
-      const newPosition = `${cmd[4]}`
-      const current = wireHash[newPosition] || 0
-      wireHash[newPosition] = current + rShift(input1, input2)
-      return acc
-    }
+      if (cmd[1] === "RSHIFT") {
+        const input1 = wireHash[cmd[0]]
+        const input2 = cmd[2]
 
-    if (cmd.length === 3) {
-      const input = wireHash[cmd[0]]
-      if (input === undefined) {
-        return [...acc, cmd]
+        if (input1 === undefined) {
+          return [...acc, cmd]
+        }
+
+        const newPosition = `${cmd[4]}`
+        const current = wireHash[newPosition] || 0
+        wireHash[newPosition] = current + rShift(input1, input2)
+        return acc
       }
 
-      const current = wireHash[cmd[2]] || 0
-      const newValue = input + current
-      wireHash[cmd[2]] = newValue
-      return acc
-    } else {
-      console.log(cmd)
-    }
-  }, [])
+      if (cmd.length === 3) {
+        const input = wireHash[cmd[0]]
+        if (input === undefined) {
+          return [...acc, cmd]
+        }
 
-  if (commandsReduced.length === 0) {
-    break
+        const current = wireHash[cmd[2]] || 0
+        const newValue = input + current
+        wireHash[cmd[2]] = newValue
+        return acc
+      }
+    }, [])
+
+    if (commandsReduced.length === 0) {
+      break
+    }
   }
-  // } else {
-  //   if (commandsReduced.length === 304) {
-  //     console.log(wireHash, commandsReduced)
-  //     break
-  //   }
-  // }
+  return wireHash.a
 }
-console.log(wireHash)
 
-// console.time("pt1")
-// console.log("pt1", getTotalLightsOn(cmds))
-// console.timeEnd("pt1")
+console.time("pt1")
+console.log("pt1", findWireAValue(commands))
+console.timeEnd("pt1")
 
 // console.time("pt2")
 // console.log("pt2", totalBrightnessValue(cmds))
