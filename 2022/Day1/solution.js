@@ -2,6 +2,8 @@ const fs = require("fs")
 const path = require("path")
 
 // parse data to array
+console.time("pt1")
+console.time("pt2")
 const text = fs.readFileSync(path.resolve(__dirname, "./input.txt"), "utf8")
 const data = text
   .split("\n\n")
@@ -13,11 +15,9 @@ const data = text
   )
   .sort((a, b) => a - b)
 
-console.time("pt1")
 console.log("pt1", data[data.length - 1])
 console.timeEnd("pt1")
 
-console.time("pt2")
 console.log(
   "pt2",
   data[data.length - 1] + data[data.length - 2] + data[data.length - 3]
