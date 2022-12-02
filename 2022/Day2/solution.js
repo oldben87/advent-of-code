@@ -9,7 +9,6 @@ const text = fs.readFileSync(path.resolve(__dirname, "./input.txt"), "utf8")
 Rock = A & X
 Paper = B & Y
 Scissors = C & Z
-
 */
 const moveScoreMaps = {
   A: { X: 3, Y: 6, Z: 0 },
@@ -46,6 +45,7 @@ const winDrawLoseMap = {
   Y: 3,
   Z: 6,
 }
+console.time("pt2")
 
 const pt2 = text.split("\n").reduce((score, moves) => {
   const [opponent, myAction] = moves.split(" ")
@@ -58,6 +58,5 @@ const pt2 = text.split("\n").reduce((score, moves) => {
   return score + roundScore + choiceScorePT2[myChoice]
 }, 0)
 
-console.time("pt2")
 console.log("pt2", pt2)
 console.timeEnd("pt2")
