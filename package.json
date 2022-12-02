@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "blueimp-md5": "^2.19.0",
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.2"
   }
 }
