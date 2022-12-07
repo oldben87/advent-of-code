@@ -77,38 +77,38 @@ const createFileStructure = (input) => {
 
   return directoryMap
 }
-const getTotalSizeOfSmallestFolders = (input) => {
-  const directoryMemo = {}
-  const directoryMap = createFileStructure(text)
 
-  const getFolderSize = (dirName) => {
-    const directory = directoryMap[dirName]
+const getFolderSize = (dirName, map, memo) => {
+  const directory = map[dirName]
 
-    let size = directory.files.reduce(
-      (total, current) => current.size + total,
+  let size = directory.files.reduce((total, current) => current.size + total, 0)
+
+  if (memo[dirName] !== undefined) {
+    return memo[dirName]
+  }
+
+  if (directory.subDirs.length) {
+    size += directory.subDirs.reduce(
+      (total, current) => total + getFolderSize(current, map, memo),
       0
     )
-
-    if (directoryMemo[dirName] !== undefined) {
-      return directoryMemo[dirName]
-    }
-
-    if (directory.subDirs.length) {
-      size += directory.subDirs.reduce(
-        (total, current) => total + getFolderSize(current),
-        0
-      )
-    }
-
-    directoryMemo[dirName] = size
-
-    return size
   }
+
+  memo[dirName] = size
+
+  return size
+}
+
+const getTotalSizeOfSmallestFolders = (input) => {
+  const directoryMemo = {}
+  const directoryMap = createFileStructure(input)
 
   const filesToParse = Object.keys(directoryMap)
   const directoryList = filesToParse.filter((obj) => obj !== "files")
 
-  directoryList.forEach(getFolderSize)
+  directoryList.forEach((name) =>
+    getFolderSize(name, directoryMap, directoryMemo)
+  )
 
   return Object.values(directoryMemo).reduce((total, current) => {
     if (current > 100000) {
@@ -118,10 +118,50 @@ const getTotalSizeOfSmallestFolders = (input) => {
   }, 0)
 }
 
-console.time("pt1")
-console.log("pt1", getTotalSizeOfSmallestFolders(text))
-console.timeEnd("pt1")
+// console.time("pt1")
+// console.log("pt1", getTotalSizeOfSmallestFolders(text))
+// console.timeEnd("pt1")
 
-// console.time("pt2")
-// console.log("pt2")
-// console.timeEnd("pt2")
+const findWhichFolderToDelete = (input) => {
+  const directoryMemo = {}
+  const directoryMap = createFileStructure(input)
+
+  const filesToParse = Object.keys(directoryMap)
+  const directoryList = filesToParse.filter((obj) => obj !== "files")
+
+  directoryList.forEach((name) =>
+    getFolderSize(name, directoryMap, directoryMemo)
+  )
+
+  // find free space of home drive
+  //
+  // max space is 70,000,000
+  // need at least 30,000,000
+
+  const outerFolders = directoryList.filter((dir) => !dir.includes("-"))
+  const sum = outerFolders.reduce(
+    (total, current) => total + directoryMemo[current],
+    0
+  )
+  const homeFileSpace = directoryMap.files.reduce(
+    (total, current) => total + current.size,
+    0
+  )
+  const usedSpace = sum + homeFileSpace
+
+  const freeSpace = 70000000 - usedSpace
+
+  const spaceNeeded = 30000000 - freeSpace
+
+  const directoriesBigEnough = directoryList.reduce((largeEnough, current) => {
+    if (directoryMemo[current] >= spaceNeeded) {
+      return [...largeEnough, directoryMemo[current]]
+    } else return largeEnough
+  }, [])
+
+  return directoriesBigEnough.sort((a, b) => a - b)[0]
+}
+
+console.time("pt2")
+console.log("pt2", findWhichFolderToDelete(text))
+console.timeEnd("pt2")
