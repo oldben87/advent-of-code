@@ -118,9 +118,9 @@ const getTotalSizeOfSmallestFolders = (input) => {
   }, 0)
 }
 
-// console.time("pt1")
-// console.log("pt1", getTotalSizeOfSmallestFolders(text))
-// console.timeEnd("pt1")
+console.time("pt1")
+console.log("pt1", getTotalSizeOfSmallestFolders(text))
+console.timeEnd("pt1")
 
 const findWhichFolderToDelete = (input) => {
   const directoryMemo = {}
