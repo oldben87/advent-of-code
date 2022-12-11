@@ -1,3 +1,4 @@
+const { clear } = require("console")
 const fs = require("fs")
 const path = require("path")
 
@@ -12,6 +13,29 @@ const parseInput = (command) => {
 }
 
 const positionsToSum = [20, 60, 100, 140, 180, 220]
+
+const generateEmptyRow = (number) => {
+  return new Array(number).fill(".").join("")
+}
+
+const getCycleRow = (cycle) => {
+  if (cycle > 200) {
+    return 5
+  }
+  if (cycle > 160) {
+    return 4
+  }
+  if (cycle > 120) {
+    return 3
+  }
+  if (cycle > 80) {
+    return 2
+  }
+  if (cycle > 40) {
+    return 1
+  }
+  return 0
+}
 
 const getSumOfPositions = (commands, sumList) => {
   const parsedInputs = commands.map(parseInput)
@@ -41,10 +65,52 @@ const getSumOfPositions = (commands, sumList) => {
   return cycleSums.reduce((acc, curr) => acc + curr, 0)
 }
 
-console.time("pt1")
-console.log("pt1", getSumOfPositions(input, positionsToSum))
-console.timeEnd("pt1")
+const printPixels = (cmds, rows) => {
+  const parsedInputs = cmds.map(parseInput)
+  let cycle = 0
+  let x = 1
 
-// console.time("pt2")
-// console.log("pt2")
-// console.timeEnd("pt2")
+  const output = []
+  for (let i = 0; i < rows; i++) {
+    output.push(generateEmptyRow(40))
+  }
+
+  parsedInputs.forEach(({ isNoop, value }) => {
+    if (isNoop) {
+      cycle++
+      const char = (cycle % 40) - 1
+
+      if (char === x || char === x - 1 || char === x + 1) {
+        const cycleRow = getCycleRow(cycle)
+        const newRow = output[cycleRow].split("")
+
+        newRow[char] = "#"
+        output[cycleRow] = newRow.join("")
+      }
+      return
+    }
+
+    for (let i = 0; i < 2; i++) {
+      cycle++
+      const char = (cycle % 40) - 1
+
+      if (char === x || char === x - 1 || char === x + 1) {
+        const cycleRow = getCycleRow(cycle)
+
+        const newRow = output[cycleRow].split("")
+        newRow[char] = "#"
+        output[cycleRow] = newRow.join("")
+      }
+    }
+    x += value
+  })
+  output.forEach((line) => console.log(line))
+}
+// console.time("pt1")
+// console.log("pt1", getSumOfPositions(input, positionsToSum))
+// console.timeEnd("pt1")
+
+console.time("pt2")
+console.log("pt2")
+printPixels(input, 6)
+console.timeEnd("pt2")
