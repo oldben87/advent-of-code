@@ -161,5 +161,5 @@ console.log("pt1", getShortestRoute(input))
 console.timeEnd("pt1")
 
 console.time("pt2")
-console.log("pt2", findClosestA(input)) // Start at the end and find the shortest to have an a?
+console.log("pt2", findClosestA(input))
 console.timeEnd("pt2")
