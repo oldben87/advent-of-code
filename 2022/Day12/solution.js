@@ -9,7 +9,7 @@ const input = fs
   .map((row) =>
     row.split("").map((letter) => {
       if (alphaIndex.includes(letter)) {
-        return alphaIndex.split("").findIndex((let) => let === letter)
+        return alphaIndex.split("").findIndex((char) => char === letter)
       }
       return letter
     })

@@ -62,9 +62,9 @@ const sumValidPairIndexes = (pairs) => {
   return validIndexSums
 }
 
-// console.time("pt1")
-// console.log("pt1", sumValidPairIndexes(parseInput(input)))
-// console.timeEnd("pt1")
+console.time("pt1")
+console.log("pt1", sumValidPairIndexes(parseInput(input)))
+console.timeEnd("pt1")
 
 const getIndexOfNewPairs = (pairs) => {
   const parsedInput = parseInput(pairs)
