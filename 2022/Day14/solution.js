@@ -107,10 +107,48 @@ const countFallingSand = (layers) => {
   return sandUnitsReleased
 }
 
-console.time("pt1")
-console.log("pt1", countFallingSand(input))
-console.timeEnd("pt1")
+const countSandPyramid = (layers) => {
+  const parsedInput = parseInput(layers)
+  const noGoArray = generateRockArray(parsedInput)
 
-// console.time("pt2")
-// console.log("pt2")
-// console.timeEnd("pt2")
+  // find lowest Y coordinate
+  const lowestYCoordinate = getLowestRockShelf(parsedInput) + 1
+
+  // start at 500, 0 drop until you cannot move
+  // if unable to go down 1, try diag left, then try diag right.
+  let currentX = 500
+  let currentY = 0
+  let sandUnitsReleased = 0
+  while (true) {
+    if (currentY === lowestYCoordinate) {
+      noGoArray.push(coordinateString(currentX, currentY))
+      currentX = 500
+      currentY = 0
+      sandUnitsReleased++
+      continue
+    }
+    const nextMove = getNextMove(currentX, currentY, noGoArray)
+    if (nextMove) {
+      currentX = nextMove.x
+      currentY = nextMove.y
+    } else if (currentY === 0 && currentX === 500) {
+      sandUnitsReleased++
+      break
+    } else {
+      noGoArray.push(coordinateString(currentX, currentY))
+      currentX = 500
+      currentY = 0
+      sandUnitsReleased++
+    }
+  }
+
+  return sandUnitsReleased
+}
+
+// console.time("pt1")
+// console.log("pt1", countFallingSand(input))
+// console.timeEnd("pt1")
+
+console.time("pt2")
+console.log("pt2", countSandPyramid(input))
+console.timeEnd("pt2")
