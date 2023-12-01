@@ -1,9 +1,14 @@
 const fs = require("fs")
 const path = require("path")
 
-const getSetup = () => {
-  const isPart1 = process.argv.includes("pt-1")
-  const isPart2 = process.argv.includes("pt-2")
+/**
+ *
+ * @param {function=} part1
+ * @param {function=} part2
+ */
+const runAOC = (part1, part2) => {
+  const isPart1 = process.argv.includes("pt1")
+  const isPart2 = process.argv.includes("pt2")
   const isTest = process.argv.includes("test")
   const useAltData = process.argv.includes("altData")
   const pathToCheck = process.argv[1].split("/")
@@ -44,10 +49,22 @@ const getSetup = () => {
   // parse data to array
   const file = `${year}/${day}/${inputFile}`
   const rawInput = fs.readFileSync(path.resolve(file), "utf8")
-  return {
-    runPart1: isPart1 || runAll,
-    runPart2: isPart2 || runAll,
-    data: rawInput.split("\n"),
+
+  const data = rawInput.split("\n")
+
+  const runPart1 = isPart1 || runAll
+  const runPart2 = isPart2 || runAll
+
+  if (runPart1) {
+    console.time("Part 1:")
+    console.log("Part 1:", part1?.(data))
+    console.timeEnd("Part 1:")
+  }
+
+  if (runPart2) {
+    console.time("Part 2:")
+    console.log("Part 2:", part2?.(data))
+    console.timeEnd("Part 2:")
   }
 }
-module.exports = { getSetup }
+module.exports = { runAOC }

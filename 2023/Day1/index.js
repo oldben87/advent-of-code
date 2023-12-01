@@ -1,6 +1,4 @@
-const { getSetup } = require("../../utils/getSetup")
-
-const { data, runPart1, runPart2 } = getSetup()
+const { runAOC } = require("../../utils/runAOC")
 
 const numbersAsStrings = {
   one: "1",
@@ -16,14 +14,29 @@ const numbersAsStrings = {
 
 const isNumber = (char) => !isNaN(Number(char))
 
+/**
+ *
+ * @param {string} str
+ * @returns
+ */
 const reverseString = (str) => {
   return str.split("").reverse().join("")
 }
 
+/**
+ *
+ * @param {string} calibration
+ * @returns
+ */
 const findFirstNumber = (calibration) => {
   return calibration.split("").find(isNumber)
 }
 
+/**
+ *
+ * @param {Array<string>} calibrations
+ * @returns
+ */
 const findNumbers = (calibrations) => {
   return calibrations.reduce((total, calibration) => {
     const firstNumber = findFirstNumber(calibration)
@@ -38,6 +51,12 @@ const findNumbers = (calibrations) => {
   }, 0)
 }
 
+/**
+ *
+ * @param {string} calibration
+ * @param {boolean=} reverse
+ * @returns
+ */
 const findFirstWordOrNumber = (calibration, reverse) => {
   return Object.entries(numbersAsStrings).reduce(
     (current, [key, value]) => {
@@ -60,7 +79,7 @@ const findFirstWordOrNumber = (calibration, reverse) => {
 
       if (indexs.length) {
         const position = Math.min(...indexs)
-        if (position <= current?.position) {
+        if (position <= current.position) {
           return { position, value }
         }
       }
@@ -70,6 +89,11 @@ const findFirstWordOrNumber = (calibration, reverse) => {
   )
 }
 
+/**
+ *
+ * @param {string} calibration
+ * @returns
+ */
 const getNumbersPt2 = (calibration) => {
   const firstNumber = findFirstWordOrNumber(calibration)?.value
   if (firstNumber === undefined) {
@@ -84,26 +108,30 @@ const getNumbersPt2 = (calibration) => {
   return firstNumber + lastNumber
 }
 
+/**
+ *
+ * @param {Array<string>} calibrations
+ * @returns
+ */
 const findWordsAndNumbers = (calibrations) => {
   const result = calibrations.map(getNumbersPt2)
   return result.reduce((total, current) => total + parseInt(current, 10), 0)
 }
 
+/**
+ * @param {Array<string>} dataInput
+ * @returns {number}
+ */
 const part1 = (dataInput) => {
   return findNumbers(dataInput)
 }
 
+/**
+ * @param {Array<string>} dataInput
+ * @returns {number}
+ */
 const part2 = (dataInput) => {
   return findWordsAndNumbers(dataInput)
 }
 
-if (runPart1) {
-  console.time("pt-1")
-  console.log("pt-1", part1(data))
-  console.timeEnd("pt-1")
-}
-if (runPart2) {
-  console.time("pt-2")
-  console.log("pt-2", part2(data))
-  console.timeEnd("pt-2")
-}
+runAOC(part1, part2)
