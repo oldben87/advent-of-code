@@ -5,7 +5,7 @@ const getSetup = () => {
   const isPart1 = process.argv.includes("pt-1")
   const isPart2 = process.argv.includes("pt-2")
   const isTest = process.argv.includes("test")
-  const useAltTest = process.argv.includes("altData")
+  const useAltData = process.argv.includes("altData")
   const pathToCheck = process.argv[1].split("/")
 
   const day = pathToCheck.find((str) => {
@@ -26,7 +26,7 @@ const getSetup = () => {
     if (str.length !== 4) {
       return false
     }
-    if (str.startsWith("20") && parseInt(str, 10) > 2015) {
+    if (str.startsWith("20") && parseInt(str, 10) >= 2015) {
       return true
     } else return false
   })
@@ -37,13 +37,17 @@ const getSetup = () => {
 
   const runAll = !isPart1 && !isPart2
 
-  const inputFile = `${useAltTest && isTest ? "alt-" : ""}${
+  const inputFile = `${useAltData ? "alt-" : ""}${
     isTest ? "test-" : ""
   }input.txt`
 
   // parse data to array
   const file = `${year}/${day}/${inputFile}`
   const rawInput = fs.readFileSync(path.resolve(file), "utf8")
-  return { isPart1, isPart2, runAll, data: rawInput.split("\n") }
+  return {
+    runPart1: isPart1 || runAll,
+    runPart2: isPart2 || runAll,
+    data: rawInput.split("\n"),
+  }
 }
 module.exports = { getSetup }
