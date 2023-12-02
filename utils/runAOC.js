@@ -2,6 +2,7 @@ const fs = require("fs")
 const path = require("path")
 
 const DATA_PATH_ARGUMENT = "-dp"
+const BASE_PATH_ARGUMENT = "-bp"
 
 /**
  * A function that takes 2 functions as arguements, the first part of the AoC chanllenge, and the second part of the AoC challenge.
@@ -16,9 +17,44 @@ const runAOC = ({ part1, part2, customDataParser }) => {
   // List of cli arguements to check for.
   const isPart1 = process.argv.includes("pt1")
   const isPart2 = process.argv.includes("pt2")
+
+  /**
+   * By default we search for a ./input.txt file.
+   * Most AoC challenges provide some test input to ensure your code runs
+   * Adding the test flag will search for a ./test-input.txt file
+   */
   const isTest = process.argv.includes("test")
+
+  /**
+   * Some AoC challenges provide alternative inputs for part 2 of the challenge.
+   * Adding the altData flag will append alt- to the front of the input file.
+   * So either alt-test-input.txt or alt-input.txt can also be used allowing up to 4 input.txt variations
+   */
   const useAltData = process.argv.includes("altData")
+
+  /**
+   * If you want to have a seperate file for input with a different name you can pass in the -dp < path_to/file.txt >
+   */
   const hasDataPath = process.argv.includes(DATA_PATH_ARGUMENT)
+
+  /**
+   * If you are running the commands not from the root folder of your AoC folders, you can pass in base file path to find the input files if they cannot be found.
+   */
+  const hasBasePath = process.argv.includes(BASE_PATH_ARGUMENT)
+
+  let basePath = ""
+
+  if (hasBasePath) {
+    const index =
+      process.argv.findIndex((arg) => arg === BASE_PATH_ARGUMENT) + 1
+    const maybePath = process.argv[index]
+    if (maybePath === undefined) {
+      throw new Error(
+        `Base path argument required after '${BASE_PATH_ARGUMENT}' command`
+      )
+    }
+    basePath = maybePath
+  }
 
   let file
 
@@ -67,7 +103,7 @@ const runAOC = ({ part1, part2, customDataParser }) => {
       isTest ? "test-" : ""
     }input.txt`
 
-    file = `${year}/${day}/${inputFile}`
+    file = `${basePath}${year}/${day}/${inputFile}`
   }
 
   // parse data to array
