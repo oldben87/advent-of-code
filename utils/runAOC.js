@@ -5,13 +5,12 @@ const DATA_PATH_ARGUMENT = "-dp"
 const BASE_PATH_ARGUMENT = "-bp"
 
 /**
- * A function that takes 2 functions as arguements, the first part of the AoC chanllenge, and the second part of the AoC challenge.
  *
  * @typedef {Object} Options
  * @property {function=} part1 - [ (data: Array<string> | T) => number ] Function for first part of AoC challenges
  * @property {function=} part2 - [ (data: Array<string> | T) => number ] function for second part of AoC challenges
  * @property {function=} customDataParser - [ (rawData: string) => T ] optional data parser when the input is in a different shape than expected.
- * @param {Options} options - options object for
+ * @param {Options} options
  */
 const runAOC = ({ part1, part2, customDataParser }) => {
   // List of cli arguements to check for.
