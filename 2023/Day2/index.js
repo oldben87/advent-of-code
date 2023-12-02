@@ -4,12 +4,6 @@ const MAX_RED = 12
 const MAX_GREEN = 13
 const MAX_BLUE = 14
 
-const MAX_DICT = {
-  red: MAX_RED,
-  green: MAX_GREEN,
-  blue: MAX_BLUE,
-}
-
 /**
  *
  * @param {string} rawId
@@ -62,6 +56,30 @@ const parseInput = (data) => {
   }, {})
 }
 
+const isGameValid = ({ red, green, blue }) => {
+  if (red === undefined && green === undefined && blue === undefined) {
+    return false
+  }
+
+  if (!!red) {
+    if (red > MAX_RED) {
+      return false
+    }
+  }
+  if (!!green) {
+    if (green > MAX_GREEN) {
+      return false
+    }
+  }
+  if (!!blue) {
+    if (blue > MAX_BLUE) {
+      return false
+    }
+  }
+
+  return true
+}
+
 /**
  *
  * @param {Array<string>} dataInput
@@ -69,9 +87,15 @@ const parseInput = (data) => {
  */
 const part1 = (dataInput) => {
   const data = parseInput(dataInput)
-  console.log(data)
 
-  return 0
+  const dataEntries = Object.entries(data)
+
+  const ids = dataEntries.map(([idAsString, games]) => {
+    const isValid = games.every(isGameValid)
+    return isValid ? parseInt(idAsString, 10) : 0
+  })
+
+  return ids.reduce((total, current) => current + total, 0)
 }
 
-runAOC(part1)
+runAOC({ part1 })
