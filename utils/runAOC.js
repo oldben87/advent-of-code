@@ -1,5 +1,5 @@
-const fs = require("fs")
-const path = require("path")
+import fs from "fs"
+import path from "path"
 
 const DATA_PATH_ARGUMENT = "-dp"
 const BASE_PATH_ARGUMENT = "-bp"
@@ -129,4 +129,4 @@ const runAOC = ({ part1, part2, customDataParser }) => {
     console.timeEnd("Part 2:")
   }
 }
-module.exports = { runAOC }
+export default runAOC

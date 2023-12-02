@@ -1,4 +1,4 @@
-const { runAOC } = require("../../utils/runAOC")
+import runAOC from "../../utils/runAOC.js"
 
 const numbersAsStrings = {
   one: "1",
