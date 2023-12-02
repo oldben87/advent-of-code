@@ -1,4 +1,6 @@
+import add from "../../utils/add.js"
 import runAOC from "../../utils/runAOC.js"
+import sum from "../../utils/sum.js"
 
 const MAX_RED = 12
 const MAX_GREEN = 13
@@ -66,11 +68,13 @@ const isGameValid = ({ red, green, blue }) => {
       return false
     }
   }
+
   if (!!green) {
     if (green > MAX_GREEN) {
       return false
     }
   }
+
   if (!!blue) {
     if (blue > MAX_BLUE) {
       return false
@@ -95,7 +99,55 @@ const part1 = (dataInput) => {
     return isValid ? parseInt(idAsString, 10) : 0
   })
 
-  return ids.reduce((total, current) => current + total, 0)
+  return add(ids)
 }
 
-runAOC({ part1 })
+/**
+ * @typedef {Object} Games
+ * @property {number=} red
+ * @property {number=} green
+ * @property {number=} blue
+ *
+ * @param {Array<Games>} games
+ * @returns
+ */
+const getPowerFromCubes = (games) => {
+  const maxes = {
+    red: 0,
+    green: 0,
+    blue: 0,
+  }
+
+  games.forEach(({ red, green, blue }) => {
+    if (!!red) {
+      maxes.red = Math.max(red, maxes.red)
+    }
+
+    if (!!green) {
+      maxes.green = Math.max(green, maxes.green)
+    }
+
+    if (!!blue) {
+      maxes.blue = Math.max(blue, maxes.blue)
+    }
+  })
+
+  return sum(Object.values(maxes))
+}
+
+/**
+ *
+ * @param {Array<string>} dataInput
+ *
+ */
+const part2 = (dataInput) => {
+  const data = parseInput(dataInput)
+
+  const values = Object.values(data)
+
+  const maxCubes = values.map(getPowerFromCubes)
+
+  return add(maxCubes)
+}
+
+runAOC({ part1, part2 })
