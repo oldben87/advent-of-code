@@ -7,10 +7,12 @@ const path = require("path")
  * @param {function=} part2
  */
 const runAOC = (part1, part2) => {
+  // List of cli arguements to check for.
   const isPart1 = process.argv.includes("pt1")
   const isPart2 = process.argv.includes("pt2")
   const isTest = process.argv.includes("test")
   const useAltData = process.argv.includes("altData")
+
   const pathToCheck = process.argv[1].split("/")
 
   const day = pathToCheck.find((str) => {
