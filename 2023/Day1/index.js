@@ -1,3 +1,4 @@
+import isNumber from "../../utils/isNumber.js"
 import runAOC from "../../utils/runAOC.js"
 
 const numbersAsStrings = {
@@ -11,8 +12,6 @@ const numbersAsStrings = {
   eight: "8",
   nine: "9",
 }
-
-const isNumber = (char) => !isNaN(Number(char))
 
 /**
  *

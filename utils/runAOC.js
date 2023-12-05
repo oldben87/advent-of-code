@@ -10,10 +10,14 @@ const BASE_PATH_ARGUMENT = "-bp"
  * @property {function=} part1 - [ (data: Array<string> | T) => number ] Function for first part of AoC challenges
  * @property {function=} part2 - [ (data: Array<string> | T) => number ] function for second part of AoC challenges
  * @property {function=} customDataParser - [ (rawData: string) => T ] optional data parser when the input is in a different shape than expected.
- * @param {Options} options
+ * @param {Options=} options
  */
-const runAOC = ({ part1, part2, customDataParser }) => {
+const runAOC = (options) => {
   // List of cli arguements to check for.
+  const part1 = options?.part1
+  const part2 = options?.part2
+  const customDataParser = options?.customDataParser
+
   const isPart1 = process.argv.includes("pt1")
   const isPart2 = process.argv.includes("pt2")
 
