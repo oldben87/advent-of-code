@@ -1,8 +1,24 @@
 import runAOC from "../../utils/runAOC.js"
 import isNumber from "../../utils/isNumber.js"
 import add from "../../utils/add.js"
+import sum from "../../utils/sum.js"
 
 const ROW_AND_COLUMN_START = 0
+
+const positions = [
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
+]
+
+const getKey = (startCoords, endCoords) => {
+  return `${startCoords.x}:${startCoords.y}|${endCoords.x}:${endCoords.y}`
+}
 
 /**
  * @param {any=} value
@@ -11,6 +27,7 @@ const validatePartNumber = (value) => {
   if (value === undefined) {
     return false
   }
+
   if (isNumber(value)) {
     return false
   }
@@ -21,6 +38,8 @@ const validatePartNumber = (value) => {
 
   return true
 }
+
+const validateGear = (value) => value === "*"
 
 /**
  *
@@ -56,17 +75,6 @@ const part1 = (data) => {
         numberEndIndex = column
 
         // Check if surrounding squares are a valid option
-        const positions = [
-          [-1, -1],
-          [-1, 0],
-          [-1, 1],
-          [0, -1],
-          [0, 1],
-          [1, -1],
-          [1, 0],
-          [1, 1],
-        ]
-
         positions.forEach(([x, y]) => {
           const dataRow = data[row + x]
           const dataValue =
@@ -105,10 +113,71 @@ const part1 = (data) => {
  * @returns
  */
 const part2 = (data) => {
-  // create memo of all part numbers
-  // create memo of all gears
-  // search for all gears with only 2 part numbers, sum the part numbers and add them together?
-  // check all
+  const height = data.length
+  const width = data[0]?.length
+  if (!width) {
+    throw new Error("Width could not be determind")
+  }
+
+  const gearSums = []
+
+  for (let row = ROW_AND_COLUMN_START; row < width; row++) {
+    for (let column = ROW_AND_COLUMN_START; column < height; column++) {
+      const valueToCheck = data[row][column]
+
+      const isGear = validateGear(valueToCheck)
+
+      if (!isGear) {
+        continue
+      }
+
+      const partNumbers = {}
+      positions.forEach(([x, y]) => {
+        const posRow = row + x
+        const posCol = column + y
+
+        const dataRow = data[posRow]
+        const dataValue = dataRow !== undefined ? dataRow[posCol] : undefined
+
+        const valueIsNumber = isNumber(dataValue)
+
+        if (valueIsNumber) {
+          // check for start of number
+          let startIndex = posCol
+          let endIndex = posCol
+          for (let i = posCol; isNumber(dataRow[i]); i--) {
+            startIndex = i
+          }
+
+          for (let i = posCol; isNumber(dataRow[i]); i++) {
+            endIndex = i
+          }
+
+          // add to memo
+          const key = getKey(
+            { x: posRow, y: startIndex },
+            { x: posRow, y: endIndex }
+          )
+          if (partNumbers[key] === undefined) {
+            let partNumber = ""
+
+            for (let i = startIndex; i <= endIndex; i++) {
+              partNumber += data[posRow][i]
+            }
+
+            partNumbers[key] = parseInt(partNumber, 10)
+          }
+        }
+      })
+
+      const partNumbersTotal = Object.values(partNumbers)
+      if (partNumbersTotal.length === 2) {
+        gearSums.push(sum(partNumbersTotal))
+      }
+    }
+  }
+
+  return add(gearSums)
 }
 
-runAOC({ part1 })
+runAOC({ part1, part2 })
