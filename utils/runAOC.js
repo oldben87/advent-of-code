@@ -13,44 +13,45 @@ const BASE_PATH_ARGUMENT = "-bp"
  * @param {Options=} options
  */
 const runAOC = (options) => {
-  // List of cli arguements to check for.
   const part1 = options?.part1
   const part2 = options?.part2
   const customDataParser = options?.customDataParser
 
-  const isPart1 = process.argv.includes("pt1")
-  const isPart2 = process.argv.includes("pt2")
+  const [_, nodeFilePath, ...cliArgs] = process.argv
+
+  // List of cli arguements to check for.
+  const isPart1 = cliArgs.includes("pt1")
+  const isPart2 = cliArgs.includes("pt2")
 
   /**
    * By default we search for a ./input.txt file.
    * Most AoC challenges provide some test input to ensure your code runs
    * Adding the test flag will search for a ./test-input.txt file
    */
-  const isTest = process.argv.includes("test")
+  const isTest = cliArgs.includes("test")
 
   /**
    * Some AoC challenges provide alternative inputs for part 2 of the challenge.
    * Adding the altData flag will append alt- to the front of the input file.
    * So either alt-test-input.txt or alt-input.txt can also be used allowing up to 4 input.txt variations
    */
-  const useAltData = process.argv.includes("altData")
+  const useAltData = cliArgs.includes("altData")
 
   /**
    * If you want to have a seperate file for input with a different name you can pass in the -dp < path_to/file.txt >
    */
-  const hasDataPath = process.argv.includes(DATA_PATH_ARGUMENT)
+  const hasDataPath = cliArgs.includes(DATA_PATH_ARGUMENT)
 
   /**
    * If you are running the commands not from the root folder of your AoC folders, you can pass in base file path to find the input files if they cannot be found.
    */
-  const hasBasePath = process.argv.includes(BASE_PATH_ARGUMENT)
+  const hasBasePath = cliArgs.includes(BASE_PATH_ARGUMENT)
 
   let basePath = ""
 
   if (hasBasePath) {
-    const index =
-      process.argv.findIndex((arg) => arg === BASE_PATH_ARGUMENT) + 1
-    const maybePath = process.argv[index]
+    const index = cliArgs.findIndex((arg) => arg === BASE_PATH_ARGUMENT) + 1
+    const maybePath = cliArgs[index]
     if (maybePath === undefined) {
       throw new Error(
         `Base path argument required after '${BASE_PATH_ARGUMENT}' command`
@@ -62,9 +63,8 @@ const runAOC = (options) => {
   let file
 
   if (hasDataPath) {
-    const index =
-      process.argv.findIndex((arg) => arg === DATA_PATH_ARGUMENT) + 1
-    const maybePath = process.argv[index]
+    const index = cliArgs.findIndex((arg) => arg === DATA_PATH_ARGUMENT) + 1
+    const maybePath = cliArgs[index]
     if (maybePath === undefined) {
       throw new Error(
         `Data file path argument required after '${DATA_PATH_ARGUMENT}' command`
@@ -73,7 +73,7 @@ const runAOC = (options) => {
     file = maybePath
   }
 
-  const pathToCheck = process.argv[1].split("/")
+  const pathToCheck = nodeFilePath.split("/")
   if (file === undefined) {
     const day = pathToCheck.find((str) => {
       if (str.length !== 4 && str.length !== 5) {
